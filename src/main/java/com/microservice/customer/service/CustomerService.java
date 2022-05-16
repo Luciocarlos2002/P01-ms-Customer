@@ -26,9 +26,9 @@ public class CustomerService {
         return customerRepository.findById(id)
                 .flatMap(bean -> {
                     bean.setName(customer.getName());
-                    bean.setLastname(customer.getLastname());
+                    bean.setLastName(customer.getLastName());
                     bean.setDni(customer.getDni());
-                    bean.setTypcustomer(customer.getTypcustomer());
+                    bean.setTypCustomer(customer.getTypCustomer());
                     return customerRepository.save(bean);
                 });
     }

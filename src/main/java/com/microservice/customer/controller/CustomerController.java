@@ -21,12 +21,12 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/Customer")
+@RequestMapping("/customer")
 public class CustomerController {
 
     private final CustomerService customerService;
 
-    @GetMapping
+    @GetMapping(value = "/allCustomers")
     public Mono<ResponseEntity<Flux<Customer>>>getAllCustomer() {
         Flux<Customer> list=this.customerService.getAllCustomer();
         return  Mono.just(ResponseEntity.ok()
@@ -34,20 +34,20 @@ public class CustomerController {
                 .body(list));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     public Mono<ResponseEntity<Customer>> getCustomerById(@PathVariable String id){
         var customer=this.customerService.getCustomerById(id);
         return customer.map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping(value = "/create")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Customer> create(@RequestBody Customer customer){
         return this.customerService.createCustomer(customer);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/update/{id}")
     public Mono<ResponseEntity<Customer>> updateCustomerById(@PathVariable String id, @RequestBody Customer customer){
 
         return this.customerService.updateCustomer(id,customer)
@@ -55,7 +55,7 @@ public class CustomerController {
                 .defaultIfEmpty(ResponseEntity.badRequest().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public Mono<ResponseEntity<Void>> deleteCustomerById(@PathVariable String id){
         return this.customerService.deleteCustomer(id)
                 .map(r -> ResponseEntity.ok().<Void>build())
